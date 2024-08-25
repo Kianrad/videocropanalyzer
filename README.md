@@ -45,15 +45,6 @@ You can download pre-built binaries for your operating system from the [Releases
    chmod +x videocropanalyzer
    ```
 
-### Homebrew (macOS)
-
-If you're using macOS, you can install the tool using Homebrew:
-
-```bash
-brew tap Kianrad/videocropanalyzer
-brew install videocropanalyzer
-```
-
 ## Usage
 
 ### Basic Command
