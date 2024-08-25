@@ -27,7 +27,7 @@ jobs:
     - name: Build binary
       run: |
         mkdir -p dist
-        GOOS=${{ matrix.goos }} GOARCH=${{ matrix.goarch }} go build -o dist/${{ matrix.goos }}_${{ matrix.goarch }}/your_project_name
+        GOOS=${{ matrix.goos }} GOARCH=${{ matrix.goarch }} go build -o dist/${{ matrix.goos }}_${{ matrix.goarch }}/videocropanalyzer
 
     - name: Upload binaries
       uses: actions/upload-artifact@v3
