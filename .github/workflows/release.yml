@@ -32,11 +32,11 @@ jobs:
         mkdir -p dist
         GOOS=${{ matrix.goos }} GOARCH=${{ matrix.goarch }} go build -o dist/${{ matrix.goos }}_${{ matrix.goarch }}/videocropanalyzer
 
-    - name: Upload binaries
+    - name: Upload binaries as artifacts
       uses: actions/upload-artifact@v3
       with:
-        name: binaries
-        path: dist/**
+        name: ${{ matrix.goos }}_${{ matrix.goarch }}_binary
+        path: dist/${{ matrix.goos }}_${{ matrix.goarch }}/your_project_name
 
   release:
     name: Create GitHub Release
@@ -44,16 +44,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Download binaries
+    - name: Download all binaries
       uses: actions/download-artifact@v3
       with:
-        name: binaries
+        name: '**_binary'
         path: ./dist
 
-    - name: Create Release
+    - name: Create GitHub Release and upload binaries
       uses: softprops/action-gh-release@v1
       with:
-        files: ./dist/**
+        files: ./dist/**/*
         tag_name: ${{ github.ref }}   # Use the tag that triggered the workflow
         name: Release ${{ github.ref }}  # Set the name of the release
         body: "Release notes for ${{ github.ref }}"  # Optional: Add release notes
