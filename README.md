@@ -86,11 +86,6 @@ $ videocropanalyzer /path/to/your/video.mp4
 
 This output shows the analysis process and the resulting crop values in JSON format.
 
-### Command-line Options
-
-- `--help`: Display help information.
-- `--version`: Show the version of the tool.
-
 ## Building from Source
 
 To build the tool from source, you'll need Go installed on your machine.
