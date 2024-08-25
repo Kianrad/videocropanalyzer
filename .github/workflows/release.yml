@@ -1,42 +1,45 @@
-name: Build and Release
+name: Release
 
 on:
   push:
     tags:
-      - 'v*.*.*'  # Triggers workflow on version tags, e.g., v1.0.0
-
-permissions:
-  contents: write  # Grant permission to create releases and upload assets
+      - 'v*.*.*'  # Triggers on tags like v1.0.0, v1.2.3, etc.
 
 jobs:
   build:
-    name: Build binaries
+    name: Build and Release
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        goos: [linux, windows, darwin]
-        goarch: [amd64, arm64]
+        os: [linux, windows, macos]
+        arch: [amd64, arm64]
+        include:
+          - os: linux
+            ext: ""
+          - os: windows
+            ext: ".exe"
+          - os: macos
+            ext: ""
 
     steps:
-    - name: Check out code
-      uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Set up Go
-      uses: actions/setup-go@v4
-      with:
-        go-version: '1.21' # Adjust this version to your project requirements
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.20'  # Specify your Go version here
 
-    - name: Build binary
-      run: |
-        mkdir -p dist
-        GOOS=${{ matrix.goos }} GOARCH=${{ matrix.goarch }} go build -o dist/${{ matrix.goos }}_${{ matrix.goarch }}/videocropanalyzer
+      - name: Build binaries
+        run: |
+          GOOS=${{ matrix.os }} GOARCH=${{ matrix.arch }} go build -o videocropanalyzer_${{ matrix.os }}_${{ matrix.arch }}${{ matrix.ext }}
 
-    - name: Upload binaries as artifacts
-      uses: actions/upload-artifact@v3
-      with:
-        name: ${{ matrix.goos }}_${{ matrix.goarch }}_binary
-        path: dist/${{ matrix.goos }}_${{ matrix.goarch }}/videocropanalyzer
+      - name: Upload binary as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: videocropanalyzer-${{ matrix.os }}-${{ matrix.arch }}
+          path: videocropanalyzer_${{ matrix.os }}_${{ matrix.arch }}${{ matrix.ext }}
 
   release:
     name: Create GitHub Release
@@ -44,20 +47,26 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Download all binaries
-      uses: actions/download-artifact@v3
-      with:
-        name: '**_binary'  # Download all artifacts with *_binary in their name
-        path: ./dist
+      - name: Download build artifacts
+        uses: actions/download-artifact@v3
+        with:
+          path: ./artifacts
 
-    - name: Create GitHub Release and upload binaries
-      uses: softprops/action-gh-release@v1
-      with:
-        files: ./dist/**/*  # Ensure all binaries are uploaded
-        tag_name: ${{ github.ref }}   # Use the tag that triggered the workflow
-        name: Release ${{ github.ref }}  # Set the name of the release
-        body: "Release notes for ${{ github.ref }}"  # Optional: Add release notes
-        draft: false  # Set to false to publish the release
-        prerelease: false  # Set to false to mark as a full release
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref_name }}
+          release_name: Release ${{ github.ref_name }}
+          draft: false
+          prerelease: false
+
+      - name: Upload Release Assets
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./artifacts/
+          asset_name: videocropanalyzer-${{ matrix.os }}-${{ matrix.arch }}${{ matrix.ext }}
+          asset_content_type: application/octet-stream
