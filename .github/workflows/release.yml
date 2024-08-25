@@ -70,6 +70,8 @@ jobs:
 
       - name: Upload Release Asset (Linux amd64)
         uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./artifacts/videocropanalyzer_linux_amd64/videocropanalyzer_linux_amd64
@@ -78,6 +80,8 @@ jobs:
 
       - name: Upload Release Asset (Linux arm64)
         uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./artifacts/videocropanalyzer_linux_arm64/videocropanalyzer_linux_arm64
@@ -86,6 +90,8 @@ jobs:
 
       - name: Upload Release Asset (Windows amd64)
         uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./artifacts/videocropanalyzer_windows_amd64/videocropanalyzer_windows_amd64.exe
@@ -94,6 +100,8 @@ jobs:
 
       - name: Upload Release Asset (Windows arm64)
         uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./artifacts/videocropanalyzer_windows_arm64/videocropanalyzer_windows_arm64.exe
@@ -102,6 +110,8 @@ jobs:
 
       - name: Upload Release Asset (macOS amd64)
         uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./artifacts/videocropanalyzer_darwin_amd64/videocropanalyzer_darwin_amd64
@@ -110,6 +120,8 @@ jobs:
 
       - name: Upload Release Asset (macOS arm64)
         uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./artifacts/videocropanalyzer_darwin_arm64/videocropanalyzer_darwin_arm64
