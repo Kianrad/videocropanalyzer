@@ -6,8 +6,8 @@ on:
       - 'v*.*.*'  # Triggers workflow on version tags, e.g., v1.0.0
 
 permissions:
-  contents: write
-  
+  contents: write  # Grant permission to create releases and upload assets
+
 jobs:
   build:
     name: Build binaries
@@ -42,6 +42,7 @@ jobs:
     name: Create GitHub Release
     needs: build
     runs-on: ubuntu-latest
+
     steps:
     - name: Download binaries
       uses: actions/download-artifact@v3
@@ -53,5 +54,10 @@ jobs:
       uses: softprops/action-gh-release@v1
       with:
         files: ./dist/**
+        tag_name: ${{ github.ref }}   # Use the tag that triggered the workflow
+        name: Release ${{ github.ref }}  # Set the name of the release
+        body: "Release notes for ${{ github.ref }}"  # Optional: Add release notes
+        draft: false  # Set to false to publish the release
+        prerelease: false  # Set to false to mark as a full release
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
