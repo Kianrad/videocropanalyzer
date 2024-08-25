@@ -7,7 +7,7 @@ on:
 
 permissions:
   contents: write
-  
+
 jobs:
   build:
     name: Build and Release
@@ -66,10 +66,50 @@ jobs:
           draft: false
           prerelease: false
 
-      - name: Upload Release Assets
+      - name: Upload Release Asset (Linux amd64)
         uses: actions/upload-release-asset@v1
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./artifacts/
-          asset_name: videocropanalyzer-${{ matrix.os }}-${{ matrix.arch }}${{ matrix.ext }}
+          asset_path: ./artifacts/videocropanalyzer_linux_amd64
+          asset_name: videocropanalyzer_linux_amd64
+          asset_content_type: application/octet-stream
+
+      - name: Upload Release Asset (Linux arm64)
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./artifacts/videocropanalyzer_linux_arm64
+          asset_name: videocropanalyzer_linux_arm64
+          asset_content_type: application/octet-stream
+
+      - name: Upload Release Asset (Windows amd64)
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./artifacts/videocropanalyzer_windows_amd64.exe
+          asset_name: videocropanalyzer_windows_amd64.exe
+          asset_content_type: application/octet-stream
+
+      - name: Upload Release Asset (Windows arm64)
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./artifacts/videocropanalyzer_windows_arm64.exe
+          asset_name: videocropanalyzer_windows_arm64.exe
+          asset_content_type: application/octet-stream
+
+      - name: Upload Release Asset (macOS amd64)
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./artifacts/videocropanalyzer_macos_amd64
+          asset_name: videocropanalyzer_macos_amd64
+          asset_content_type: application/octet-stream
+
+      - name: Upload Release Asset (macOS arm64)
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./artifacts/videocropanalyzer_macos_arm64
+          asset_name: videocropanalyzer_macos_arm64
           asset_content_type: application/octet-stream
