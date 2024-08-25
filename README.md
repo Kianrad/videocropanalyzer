@@ -70,22 +70,6 @@ This command will output the suggested crop values in JSON format.
 
 This output indicates that the tool suggests cropping 40 pixels from the top and bottom, and 10 pixels from the left and right of the video.
 
-### Sample Output
-
-Here’s a sample of what you might see when running the tool:
-
-```bash
-$ videocropanalyzer /path/to/your/video.mp4
-{
-  "top": 40,
-  "bottom": 40,
-  "left": 10,
-  "right": 10
-}
-```
-
-This output shows the analysis process and the resulting crop values in JSON format.
-
 ## Building from Source
 
 To build the tool from source, you'll need Go installed on your machine.
