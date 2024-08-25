@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"image/jpeg"
 	"io"
+	"log"
 	"os"
 	"strconv"
 
@@ -92,60 +93,82 @@ func detectCropValues(buf io.Reader) (models.HorizontalCrop, models.VerticalCrop
 
 	img, err := jpeg.Decode(buf)
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 
 	bounds := img.Bounds()
 	width, height := bounds.Max.X, bounds.Max.Y
 
-	threshold := uint8(10)
+	threshold := uint8(50)
 
-	hcrop := 0
-	wcrop := 0
-
+	// Detect top crop
 	for y := 0; y < height; y++ {
 		allBlack := true
 		for x := 0; x < width; x++ {
 			r, g, b, _ := img.At(x, y).RGBA()
 			if uint8(r>>8) > threshold || uint8(g>>8) > threshold || uint8(b>>8) > threshold {
 				allBlack = false
+				break
 			}
 		}
 		if allBlack {
-			hcrop++
+			horizontalCrop.Top++
 		} else {
-			if hcrop > 0 {
-				horizontalCrop.Top = hcrop
-			}
-			hcrop = 0
-		}
-
-		if y == height-1 && hcrop > 0 {
-			horizontalCrop.Bottom = hcrop
+			break
 		}
 	}
 
+	// Detect bottom crop
+	for y := height - 1; y >= 0; y-- {
+		allBlack := true
+		for x := 0; x < width; x++ {
+			r, g, b, _ := img.At(x, y).RGBA()
+			if uint8(r>>8) > threshold || uint8(g>>8) > threshold || uint8(b>>8) > threshold {
+				allBlack = false
+				break
+			}
+		}
+		if allBlack {
+			horizontalCrop.Bottom++
+		} else {
+			break
+		}
+	}
+
+	// Detect left crop
 	for x := 0; x < width; x++ {
 		allBlack := true
 		for y := 0; y < height; y++ {
 			r, g, b, _ := img.At(x, y).RGBA()
 			if uint8(r>>8) > threshold || uint8(g>>8) > threshold || uint8(b>>8) > threshold {
 				allBlack = false
+				break
 			}
 		}
 		if allBlack {
-			wcrop++
+			verticalCrop.Left++
 		} else {
-			if wcrop > 0 {
-				verticalCrop.Left = wcrop
-			}
-			wcrop = 0
-		}
-
-		if x == width-1 && wcrop > 0 {
-			verticalCrop.Right = wcrop
+			break
 		}
 	}
+
+	// Detect right crop
+	for x := width - 1; x >= 0; x-- {
+		allBlack := true
+		for y := 0; y < height; y++ {
+			r, g, b, _ := img.At(x, y).RGBA()
+			if uint8(r>>8) > threshold || uint8(g>>8) > threshold || uint8(b>>8) > threshold {
+				allBlack = false
+				break
+			}
+		}
+		if allBlack {
+			verticalCrop.Right++
+		} else {
+			break
+		}
+	}
+
 	return horizontalCrop, verticalCrop
 }
 
