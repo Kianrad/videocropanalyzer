@@ -36,13 +36,13 @@ jobs:
 
       - name: Build binaries
         run: |
-          GOOS=${{ matrix.os }} GOARCH=${{ matrix.arch }} go build -o videocropanalyzer_${{ matrix.os }}_${{ matrix.arch }}${{ matrix.ext }}
+          GOOS=${{ matrix.os }} GOARCH=${{ matrix.arch }} go build -o videocropanalyzerـ${{ matrix.os }}ـ${{ matrix.arch }}${{ matrix.ext }}
 
       - name: Upload binary as artifact
         uses: actions/upload-artifact@v3
         with:
           name: videocropanalyzerـ${{ matrix.os }}ـ${{ matrix.arch }}
-          path: videocropanalyzer_${{ matrix.os }}_${{ matrix.arch }}${{ matrix.ext }}
+          path: videocropanalyzerـ${{ matrix.os }}ـ${{ matrix.arch }}${{ matrix.ext }}
 
   release:
     name: Create GitHub Release
