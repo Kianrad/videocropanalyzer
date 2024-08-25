@@ -115,7 +115,7 @@ func detectCropValues(buf io.Reader) (models.HorizontalCrop, models.VerticalCrop
 			hcrop++
 		} else {
 			if hcrop > 0 {
-				horizontalCrop.Top = hcrop - 1
+				horizontalCrop.Top = hcrop
 			}
 			hcrop = 0
 		}
@@ -137,7 +137,7 @@ func detectCropValues(buf io.Reader) (models.HorizontalCrop, models.VerticalCrop
 			wcrop++
 		} else {
 			if wcrop > 0 {
-				verticalCrop.Left = wcrop - 1
+				verticalCrop.Left = wcrop
 			}
 			wcrop = 0
 		}
@@ -265,5 +265,5 @@ func main() {
 		return
 	}
 
-	fmt.Print(string(obj))
+	fmt.Println(string(obj))
 }
