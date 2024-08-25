@@ -67,7 +67,7 @@ jobs:
           prerelease: false
 
       - name: List downloaded artifacts
-        run: ls -la ./artifacts
+        run: ls -la ./artifacts/videocropanalyzer_linux_amd64
 
       - name: Upload Release Asset (Linux amd64)
         uses: actions/upload-release-asset@v1
